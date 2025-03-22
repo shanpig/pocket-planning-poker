@@ -1,3 +1,5 @@
+export type Rooms = Record<string, Room>;
+
 export type Room = {
   id: string;
   users: Users;
