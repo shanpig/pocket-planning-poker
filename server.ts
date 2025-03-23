@@ -91,7 +91,11 @@ app.prepare().then(() => {
       handler: () => {
         socket.rooms.forEach((roomId) => {
           delete rooms[roomId].users[socket.id];
-          sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(roomId) } }, roomId);
+          if (Object.keys(rooms[roomId].users).length === 0) {
+            delete rooms[roomId];
+          } else {
+            sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(roomId) } }, roomId);
+          }
         });
       },
     });
