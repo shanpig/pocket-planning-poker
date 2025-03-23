@@ -1,9 +1,9 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
-import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "@/lib/events";
-import { Room, Rooms } from "@/app/type/room";
-import { ServerSender } from "@/lib/sender/sender";
+import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "./src/lib/events";
+import { Room, Rooms } from "./src/app/type/room";
+import { ServerSender } from "./src/lib/sender/sender";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
