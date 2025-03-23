@@ -2,7 +2,7 @@ import { Room } from "@/app/type/room";
 import { CLIENT_RECEIVED_EVENTS, CLIENT_SENT_EVENTS } from "@/lib/events";
 import { ClientSender } from "@/lib/sender/sender";
 import { socket } from "@/lib/socket";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -10,6 +10,7 @@ const sender = new ClientSender(socket);
 
 const useRoom = () => {
   const { roomId } = useParams<{ roomId: string }>();
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const [room, setRoom] = useState<Room>({
@@ -51,6 +52,7 @@ const useRoom = () => {
   useEffect(() => {
     if (socket.connected) {
       console.log("connected to server");
+      sender.sendEvent({ type: CLIENT_SENT_EVENTS.CHECK_ROOM, data: { roomId } });
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.GET_ROOM_UPDATE, data: { roomId } });
     }
 
@@ -92,11 +94,20 @@ const useRoom = () => {
       },
     });
 
+    sender.on({
+      type: CLIENT_RECEIVED_EVENTS.ROOM_EXISTS,
+      handler: (data) => {
+        if (!data.exists) {
+          router.push("/");
+        }
+      },
+    });
+
     window.addEventListener("beforeunload", disconnect);
     return () => {
       window.removeEventListener("beforeunload", disconnect);
     };
-  }, [disconnect, roomId]);
+  }, [disconnect, roomId, router]);
   console.log(room);
   return {
     name,

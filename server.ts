@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import next from "next";
-import { Server } from "socket.io";
+import { DefaultEventsMap, Server, Socket } from "socket.io";
 import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "./src/lib/events";
 import { Room, Rooms } from "./src/app/type/room";
 import { ServerSender } from "./src/lib/sender/sender";
@@ -22,7 +22,7 @@ const createRoom = (roomId: string) => {
 };
 
 const createUser = (socketId: string, name: string, roomId: string) => {
-  if (Object.values(rooms[roomId].users).some((user) => user.name === name)) {
+  if (Object.values(rooms[roomId]?.users || {}).some((user) => user.name === name)) {
     return {
       ok: false,
       error: "User already exists",
@@ -48,7 +48,7 @@ const getRoom = (roomId: string): Room => {
 
 const getUsers = (roomId: string) => {
   return Object.fromEntries(
-    Object.entries(rooms[roomId].users).map(([id, user]) => [
+    Object.entries(rooms[roomId]?.users || {}).map(([id, user]) => [
       id,
       {
         ...user,
@@ -56,6 +56,25 @@ const getUsers = (roomId: string) => {
       },
     ])
   );
+};
+
+const cleanupUser = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) => {
+  console.log("server: cleaning up rooms. current room status: ", JSON.stringify(rooms));
+  socket.rooms.forEach((roomId) => {
+    console.log(`server: removing user ${socket.id} from room ${roomId}`);
+    delete rooms[roomId].users[socket.id];
+  });
+};
+
+const cleanupRooms = (sender: ServerSender) => {
+  Object.values(rooms).forEach((room) => {
+    if (Object.keys(room.users).length === 0) {
+      console.log(`server: room ${room.id} is empty, deleting`);
+      delete rooms[room.id];
+    } else {
+      sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(room.id) } }, room.id);
+    }
+  });
 };
 
 app.prepare().then(() => {
@@ -89,14 +108,9 @@ app.prepare().then(() => {
     sender.on({
       type: SERVER_RECEIVED_EVENTS.DISCONNECT,
       handler: () => {
-        socket.rooms.forEach((roomId) => {
-          delete rooms[roomId].users[socket.id];
-          if (Object.keys(rooms[roomId].users).length === 0) {
-            delete rooms[roomId];
-          } else {
-            sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(roomId) } }, roomId);
-          }
-        });
+        console.log("server: a user disconnected");
+        cleanupUser(socket);
+        cleanupRooms(sender);
       },
     });
 
@@ -133,13 +147,27 @@ app.prepare().then(() => {
         sender.toAll({ type: SERVER_SENT_EVENTS.RESTARTED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
+
+    sender.on({
+      type: SERVER_RECEIVED_EVENTS.CHECK_ROOM,
+      handler: (data) => {
+        sender.sendEvent({ type: SERVER_SENT_EVENTS.ROOM_EXISTS, data: { exists: !!rooms[data.roomId] } });
+      },
+    });
+
+    sender.on({
+      type: SERVER_RECEIVED_EVENTS.CREATE_ROOM,
+      handler: (data) => {
+        createRoom(data.roomId);
+        sender.sendEvent({ type: SERVER_SENT_EVENTS.ROOM_CREATED, data: { roomId: data.roomId } });
+      },
+    });
   });
 
   io.on("disconnect", (socket) => {
-    console.log("a user disconnected");
-    Object.values(rooms).forEach((room) => {
-      delete room.users[socket.id];
-    });
+    const sender = new ServerSender(io, socket);
+    console.log("io: a user disconnected");
+    cleanupRooms(sender);
   });
 
   httpServer
