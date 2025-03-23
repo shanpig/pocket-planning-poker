@@ -60,9 +60,10 @@ const getUsers = (roomId: string) => {
 
 const cleanupUser = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) => {
   console.log("server: cleaning up rooms. current room status: ", JSON.stringify(rooms));
-  socket.rooms.forEach((roomId) => {
-    console.log(`server: removing user ${socket.id} from room ${roomId}`);
-    delete rooms[roomId].users[socket.id];
+
+  Object.values(rooms).forEach((room) => {
+    console.log(`server: removing user ${socket.id} from room ${room.id}`);
+    delete room.users[socket.id];
   });
 };
 
@@ -103,6 +104,14 @@ app.prepare().then(() => {
           sender.sendEvent({ type: SERVER_SENT_EVENTS.ERROR, data: { error: result.error } });
         }
       },
+    });
+
+    // 不知為何 socket.on("disconnect") 不會在關閉頁面、重整頁面等時間點觸發，所以改用 conn.on("close") 來監聽
+    // ref: https://socket.io/docs/v4/server-socket-instance/
+    socket.conn.on("close", (reason) => {
+      console.log("server: a user disconnected, reason: ", reason);
+      cleanupUser(socket);
+      cleanupRooms(sender);
     });
 
     sender.on({

@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { socket } from "@/lib/socket";
 import { ClientSender } from "@/lib/sender/sender";
 import { CLIENT_RECEIVED_EVENTS, CLIENT_SENT_EVENTS } from "@/lib/events";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const sender = new ClientSender(socket);
 
@@ -39,17 +39,11 @@ const HomePage: React.FC = () => {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-4xl font-bold">Welcome to Planning Poker</h1>
-      <button
-        onClick={createRoom}
-        disabled={roomCreating}
-        className={cn(`mt-4 px-4 py-2 bg-blue-500 text-white rounded cursor-pointer`, {
-          "bg-gray-500": roomCreating,
-        })}
-      >
-        {roomCreating ? "Creating..." : "Create or Join a Room"}
-      </button>
+    <div className="flex flex-col gap-4 items-center justify-center min-h-screen p-2">
+      <h1 className="text-4xl font-bold text-center">Welcome to Planning Poker</h1>
+      <Button onClick={createRoom} disabled={roomCreating}>
+        {roomCreating ? "Creating..." : "Create a Room"}
+      </Button>
       <Toaster />
     </div>
   );

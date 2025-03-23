@@ -8,21 +8,46 @@ import { toast } from "sonner";
 
 const sender = new ClientSender(socket);
 
-const useRoom = () => {
+const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const { roomId } = useParams<{ roomId: string }>();
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState<Room>({
-    id: "",
-    users: {},
-    flipped: false,
-  });
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [name, setName] = useState(debug ? "debug" : "");
+  const [room, setRoom] = useState<Room>(
+    debug
+      ? {
+          id: "debug",
+          users: {
+            ["debug-user"]: {
+              id: "debug-user",
+              name: "debug",
+              card: "XXS",
+            },
+            ["debug-user-2"]: {
+              id: "debug-user-2",
+              name: "debug-2",
+            },
+            ["debug-user-3"]: {
+              id: "debug-user-3",
+              name: "debug-3",
+              card: "XXS",
+            },
+          },
+          flipped: false,
+        }
+      : {
+          id: "",
+          users: {},
+          flipped: false,
+        }
+  );
+  const [selectedCard, setSelectedCard] = useState<string | null>(debug ? "XXS" : null);
 
   const disconnect = useCallback((e: Event) => {
     e.preventDefault();
-    console.log("disconnecting from server");
+    return Promise.resolve(() => {
+      console.log("disconnecting from server");
+    });
   }, []);
 
   const joinWithName = useCallback(
@@ -50,6 +75,7 @@ const useRoom = () => {
   }, [roomId]);
 
   useEffect(() => {
+    if (debug) return;
     if (socket.connected) {
       console.log("connected to server");
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.CHECK_ROOM, data: { roomId } });
@@ -107,11 +133,12 @@ const useRoom = () => {
     return () => {
       window.removeEventListener("beforeunload", disconnect);
     };
-  }, [disconnect, roomId, router]);
-  console.log(room);
+  }, [disconnect, debug, roomId, router]);
+
   return {
     name,
     room,
+    socket: debug ? { id: "debug-user" } : socket,
     selectedCard,
     joinWithName,
     selectCard,
