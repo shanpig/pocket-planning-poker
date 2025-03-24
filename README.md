@@ -17,33 +17,33 @@ It's super easy:
 
 1. Setup [ngrok](https://dashboard.ngrok.com/get-started/setup/macos) (I use ngrok for reverse https proxying to tunnel through localhost. You can skp this in the bin/poker.sh if you have your own method):
 
-```bash
-# mac
-brew install ngrok
+   ```bash
+   # mac
+   brew install ngrok
 
-# windows
-choco install ngrok
-```
+   # windows
+   choco install ngrok
+   ```
 
-add your own [ngrok auth token](https://dashboard.ngrok.com/get-started/your-authtoken):
+   rename .env.template to .env and add your own [ngrok auth token](https://dashboard.ngrok.com/get-started/your-authtoken):
 
-```bash
-# check if you have already setup ngrok auth token or not.
-ngrok config check
-# if not, then
-ngrok config add-authtoken $YOUR_AUTHTOKEN
-```
+   ```bash
+   # .env.template -> .env
+   NGROK_AUTHTOKEN=<your ngrok authtoken>
+   EXPOSED_PORT=6789
+   PORT=3030
+   ```
 
 2. Run the script:
 
-```bash
-bin/poker.sh
-```
+   ```bash
+   bin/poker.sh
+   ```
 
 3. Use the link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
    <img src="https://github.com/user-attachments/assets/1fdb6222-7037-4c09-adc4-0c54e5732f8e" />
 
-and that's it ! 🔥
+   and that's it ! 🔥
 
 If you want to close the app, just ctrl-c to close the process 😎
 
