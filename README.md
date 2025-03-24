@@ -1,5 +1,8 @@
 # 🃏 Pocket Planning Poker
 
+<img src="https://github.com/user-attachments/assets/e3a8429b-95ed-44f9-b94a-195bec15fe85" width="100%"/>
+<br/><br/>
+
 Planning poker everywhere - this one is a small and concise one.
 
 - We don't need to host it on cloud; it can be run locally with ease.
@@ -8,24 +11,43 @@ Planning poker everywhere - this one is a small and concise one.
 
 Planning Poker is a consensus-based, gamified technique for estimating, commonly used in agile development.
 
-## How to Run the Application
+## ▶️ How to Run the Application
 
 It's super easy:
 
-1. Run the script:
+1. Setup [ngrok](https://dashboard.ngrok.com/get-started/setup/macos) (I use ngrok for reverse https proxying to tunnel through localhost. You can skp this in the bin/poker.sh if you have your own method):
+
+```bash
+# mac
+brew install ngrok
+
+# windows
+choco install ngrok
+```
+
+add your own [ngrok auth token](https://dashboard.ngrok.com/get-started/your-authtoken):
+
+```bash
+# check if you have already setup ngrok auth token or not.
+ngrok config check
+# if not, then
+ngrok config add-authtoken $YOUR_AUTHTOKEN
+```
+
+2. Run the script:
 
 ```bash
 bin/poker.sh
 ```
 
-2. Use the link in the stdout (`https://<:id>.lhr.life`) to visit the app
-   <img src="https://github.com/user-attachments/assets/bfbe5190-4e68-4189-8d44-4bd2d9d9f37c" />
+3. Use the link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
+   <img src="https://github.com/user-attachments/assets/1fdb6222-7037-4c09-adc4-0c54e5732f8e" />
 
 and that's it ! 🔥
 
 If you want to close the app, just ctrl-c to close the process 😎
 
-## Tech Stack
+## 💻 Tech Stack
 
 This project utilizes the following technologies:
 
@@ -36,6 +58,6 @@ This project utilizes the following technologies:
 - **Tailwind CSS** : A utility-first CSS framework for styling.
 - **TypeScript** : A typed superset of JavaScript that compiles to plain JavaScript.
 
-## Emotional ~Damage~ Support
+## 🌟 Emotional ~Damage~ Support
 
-If you found this repo useful, please give me a star to let me know.
+If you found this repo useful, please give me a star 🌟 to let me know.

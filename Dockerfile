@@ -31,7 +31,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 ENV NODE_ENV=production
+ENV PORT=$PORT
 
-EXPOSE 3000
+EXPOSE $PORT
 
 CMD ["npm", "run", "start"]
