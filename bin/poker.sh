@@ -16,9 +16,10 @@ then
     echo "NGROK_AUTHTOKEN is not set in the .env file. Please set it to proceed."
     exit 1
 else
-    if ngrok config check | grep -q "Valid configuration"
+    result=$(ngrok config check)
+    if grep -q "Valid configuration" <<< $result
     then
-        echo "NGROK_AUTHTOKEN is already set as $NGROK_AUTHTOKEN."
+        echo "NGROK_AUTHTOKEN is already set."
     else
         echo "Setting ngrok authtoken..."
         ngrok authtoken $NGROK_AUTHTOKEN
