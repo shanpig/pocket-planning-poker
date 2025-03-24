@@ -52,6 +52,7 @@ export default function RoomPage() {
           <div className="text-2xl">What is your name?</div>
           <input
             type="text"
+            autoFocus
             className="border-2 border-gray-300 rounded-md p-2"
             onChange={(e) => setInput(e.target.value)}
           />
