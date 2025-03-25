@@ -1,6 +1,7 @@
 # 🃏 Pocket Planning Poker
 
 <img src="https://github.com/user-attachments/assets/e3a8429b-95ed-44f9-b94a-195bec15fe85" width="100%"/>
+
 <br/><br/>
 
 Planning poker everywhere - this one is a small and concise one.
@@ -31,7 +32,7 @@ It's super easy:
    # .env.template -> .env
    NGROK_AUTHTOKEN=<your ngrok authtoken>
    EXPOSED_PORT=6789
-   PORT=3030
+   PORT=6789
    ```
 
 2. Run the script:
@@ -40,8 +41,8 @@ It's super easy:
    bin/poker.sh
    ```
 
-3. Use the link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
-   <img src="https://github.com/user-attachments/assets/1fdb6222-7037-4c09-adc4-0c54e5732f8e" />
+3. Use the ngrok website link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
+   <img src="https://github.com/user-attachments/assets/f3351b16-9ad6-477a-a339-3291d01a6490" />
 
    and that's it ! 🔥
 
