@@ -1,7 +1,7 @@
 {
   "name": "pocket-planning-poker",
   "description": "A minimalistic planning poker tool that can be spun up locally and used remotely.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "David <shanpigLiao@gmail.com> (https://shanpig.com)",
   "license": "MIT",
   "repository": {
