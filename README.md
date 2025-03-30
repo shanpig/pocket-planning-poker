@@ -1,6 +1,6 @@
 # 🃏 Pocket Planning Poker
 
-<img src="https://github.com/user-attachments/assets/e3a8429b-95ed-44f9-b94a-195bec15fe85" width="100%"/>
+![pocket-planning-poker](/public/pocket-planning-poker.png)
 
 <br/><br/>
 
@@ -42,7 +42,8 @@ It's super easy:
    ```
 
 3. Use the ngrok website link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
-   <img src="https://github.com/user-attachments/assets/f3351b16-9ad6-477a-a339-3291d01a6490" />
+
+   ![exec](/public/exec.png)
 
    and that's it ! 🔥
 
