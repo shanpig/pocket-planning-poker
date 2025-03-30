@@ -44,5 +44,8 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "^5"
+  },
+  "bin": {
+    "pocket-planning-poker": "./bin/poker.sh"
   }
 }
