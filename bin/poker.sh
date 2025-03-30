@@ -45,5 +45,6 @@ echo -e "| ngrok website: $exposed_url"
 
 echo "========== ngrok =========="
 
-docker compose up
+npm run docker:up
 
+trap 'echo "SIGINT received, closing ngrok..."; pkill ngrok; exit' SIGINT
