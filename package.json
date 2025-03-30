@@ -1,7 +1,13 @@
 {
   "name": "pocket-planning-poker",
+  "description": "A minimalistic planning poker tool that can be spun up locally and used remotely.",
   "version": "0.1.0",
-  "private": true,
+  "author": "David <shanpigLiao@gmail.com> (https://shanpig.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shanpig/pocket-planning-poker.git"
+  },
   "scripts": {
     "dev": "tsx watch server.ts",
     "build": "next build && tsc -p tsconfig.server.json",
