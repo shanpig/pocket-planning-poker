@@ -1,3 +1,4 @@
+import { CardEnum } from "@/app/type/card";
 import { Room } from "@/app/type/room";
 import { CLIENT_RECEIVED_EVENTS, CLIENT_SENT_EVENTS } from "@/lib/events";
 import { ClientSender } from "@/lib/sender/sender";
@@ -21,7 +22,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user"]: {
               id: "debug-user",
               name: "debug",
-              card: "XXS",
+              card: CardEnum.XXS,
             },
             ["debug-user-2"]: {
               id: "debug-user-2",
@@ -30,7 +31,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user-3"]: {
               id: "debug-user-3",
               name: "debug-3",
-              card: "XXS",
+              card: CardEnum.XXS,
             },
           },
           flipped: false,
@@ -41,7 +42,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
           flipped: false,
         }
   );
-  const [selectedCard, setSelectedCard] = useState<string | null>(debug ? "XXS" : null);
+  const [selectedCard, setSelectedCard] = useState<CardEnum | null>(debug ? CardEnum.XXS : null);
 
   const disconnect = useCallback((e: Event) => {
     e.preventDefault();
@@ -58,7 +59,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   );
 
   const selectCard = useCallback(
-    (card: string) => {
+    (card: CardEnum) => {
       setSelectedCard(card);
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.SELECT_CARD, data: { card, roomId } });
     },

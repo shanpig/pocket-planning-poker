@@ -1,0 +1,12 @@
+export enum CardEnum {
+  XXS = "XXS",
+  XS = "XS",
+  S = "S",
+  M = "M",
+  L = "L",
+  XL = "XL",
+  XXL = "XXL",
+  CONCEALED = "concealed",
+}
+
+export type CardValue = CardEnum | "concealed" | null;

@@ -1,13 +1,14 @@
 import { FC } from "react";
 import { CardProps } from "./Card.type";
 import { cn } from "@/lib/utils";
-import CardBack from "@/assets/card-back.svg";
+import Image from "next/image";
+import { CARD_STYLES } from "@/app/constants/cards";
 
-const Card: FC<CardProps> = ({ value, flipped, selected, hoverable, onClick }) => {
+const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, onClick }) => {
   return (
     <div
       className={cn(
-        "relative w-10 h-15 shrink-0 sm:w-16 sm:h-24 md:w-24 md:h-36 perspective-1000 transition-all duration-150",
+        "relative w-16 h-24 shrink-0 sm:w-24 sm:h-36 md:w-30 md:h-45 perspective-1000 transition-all duration-150",
         {
           "cursor-pointer": onClick,
           "hover:-translate-y-1 hover:shadow-xl": hoverable,
@@ -27,17 +28,14 @@ const Card: FC<CardProps> = ({ value, flipped, selected, hoverable, onClick }) =
         >
           <>
             {/* Card front */}
-            <div className="absolute w-full h-full flex backface-hidden rotate-y-180 items-center justify-center bg-emerald-200 border-4 border-emerald-400 rounded-sm md:rounded-md text-xs sm:text-base md:text-lg lg:text-xl transition-colors duration-150">
-              <div>{value}</div>
+            <div className="absolute w-full h-full flex backface-hidden rotate-y-180 items-center justify-center  rounded-sm md:rounded-md text-xs sm:text-base md:text-lg lg:text-xl transition-colors duration-150">
+              {CARD_STYLES[cardStyle].cards[value] && (
+                <Image src={CARD_STYLES[cardStyle].cards[value]} alt={value} fill />
+              )}
             </div>
             {/* Card back */}
-            <div className="absolute w-full h-full backface-hidden  flex items-center justify-center bg-emerald-200 border-4 border-emerald-400 rounded-sm md:rounded-md">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={CardBack.src}
-                alt="Card Back"
-                className="p-2 w-full h-full object-cover rounded-sm md:rounded-md"
-              />
+            <div className="absolute w-full h-full backface-hidden  flex items-center justify-center rounded-sm md:rounded-md">
+              <Image src={CARD_STYLES[cardStyle].back} alt="Card Back" fill />
             </div>
           </>
         </div>

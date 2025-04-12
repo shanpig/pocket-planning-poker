@@ -4,6 +4,7 @@ import { DefaultEventsMap, Server, Socket } from "socket.io";
 import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "./src/lib/events";
 import { Room, Rooms } from "./src/app/type/room";
 import { ServerSender } from "./src/lib/sender/sender";
+import { CardEnum, CardValue } from "./src/app/type/card";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -52,7 +53,7 @@ const getUsers = (roomId: string) => {
       id,
       {
         ...user,
-        card: rooms[roomId].flipped ? user.card : user.card ? "concealed" : "",
+        card: rooms[roomId].flipped ? user.card : user.card ? CardEnum.CONCEALED : undefined,
       },
     ])
   );
@@ -133,7 +134,7 @@ app.prepare().then(() => {
     sender.on({
       type: SERVER_RECEIVED_EVENTS.SELECT_CARD,
       handler: (data) => {
-        rooms[data.roomId].users[socket.id].card = data.card;
+        rooms[data.roomId].users[socket.id].card = data.card as CardValue;
         sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
