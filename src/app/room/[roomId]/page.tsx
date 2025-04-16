@@ -11,6 +11,7 @@ import useRoom from "./hooks/useRoom";
 import MembersTable from "@/components/MembersTable";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { countBy, last, maxBy } from "lodash-es";
 
 export default function RoomPage() {
   const [input, setInput] = useState("");
@@ -18,13 +19,23 @@ export default function RoomPage() {
 
   const { name, room, socket, selectedCard, joinWithName, selectCard, flipCards, restart } = useRoom();
 
+  const appearedTimes = countBy(Object.values(room.users).map(({ card }) => card?.value));
+  const mostFrequentlyChoosedEntry = maxBy(Object.entries(appearedTimes), last) || ["", 0];
+  const mostFrequentlyChoosed =
+    room.flipped && mostFrequentlyChoosedEntry[1] > 1 ? mostFrequentlyChoosedEntry[0] : undefined;
+
   return (
     <main className="flex flex-col items-center gap-4 p-6 h-screen">
       {name ? (
         <div className="flex flex-col justify-center gap-8 pt-4 pb-24 sm:pb-36 w-full">
           <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full lg:mb-8">
-            <div className="sm:text-lg lg:text-2xl mb-4 text-center">Members in the room</div>
-            <MembersTable room={room} socketId={socket.id} cardStyle={cardStyle} />
+            <div className="sm:text-lg lg:text-2xl text-center">Members in the room</div>
+            <MembersTable
+              room={room}
+              socketId={socket.id}
+              cardStyle={cardStyle}
+              mostFrequentlyChoosed={mostFrequentlyChoosed}
+            />
           </div>
 
           <div className="flex gap-4 justify-center flex-wrap">

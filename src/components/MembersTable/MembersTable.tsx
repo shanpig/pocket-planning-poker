@@ -7,15 +7,18 @@ const MembersTable = ({
   room,
   socketId,
   cardStyle,
+  mostFrequentlyChoosed,
 }: {
   room: Room;
   socketId?: string;
   cardStyle: keyof typeof CARD_STYLES;
+  mostFrequentlyChoosed: string | undefined;
 }) => {
   return (
-    <div className="flex flex-row gap-6 justify-center flex-wrap">
+    <div className="flex flex-row gap-6 justify-center flex-wrap py-4">
       {Object.values(room.users).map((user) => {
         const isSelf = socketId === user.id;
+        const isMostFrequent = room.flipped ? mostFrequentlyChoosed === user.card?.value : false;
 
         return (
           <div
@@ -31,6 +34,7 @@ const MembersTable = ({
               cardStyle={cardStyle}
               value={user.card?.value}
               nonce={user.card?.nonce}
+              isMostFrequent={isMostFrequent}
               flipped={room.flipped || isSelf}
             />
           </div>
