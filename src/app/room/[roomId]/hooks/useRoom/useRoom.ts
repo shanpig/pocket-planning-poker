@@ -38,11 +38,13 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             },
           },
           flipped: false,
+          flippedTimes: 0,
         }
       : {
           id: "",
           users: {},
           flipped: false,
+          flippedTimes: 0,
         }
   );
   const [selectedCard, setSelectedCard] = useState<CardEnum | null>(debug ? CardEnum.XXS : null);

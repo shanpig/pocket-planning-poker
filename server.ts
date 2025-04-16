@@ -28,6 +28,7 @@ const createRoom = (roomId: string) => {
     id: roomId,
     users: {},
     flipped: false,
+    flippedTimes: 0,
   };
 };
 
@@ -169,6 +170,7 @@ app.prepare().then(() => {
       type: SERVER_RECEIVED_EVENTS.FLIP_CARDS,
       handler: (data) => {
         rooms[data.roomId].flipped = true;
+        rooms[data.roomId].flippedTimes = rooms[data.roomId].flippedTimes + 1;
         sender.toAll(
           { type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId, socket.id) } },
           data.roomId

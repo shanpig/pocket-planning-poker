@@ -6,6 +6,7 @@ export type Room = {
   id: string;
   users: Users;
   flipped: boolean;
+  flippedTimes: number;
 };
 
 export type User = {

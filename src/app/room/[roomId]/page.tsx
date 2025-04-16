@@ -12,6 +12,7 @@ import MembersTable from "@/components/MembersTable";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { countBy, last, maxBy } from "lodash-es";
+import { AnimatePresence, motion } from "motion/react";
 
 export default function RoomPage() {
   const [input, setInput] = useState("");
@@ -25,7 +26,21 @@ export default function RoomPage() {
     room.flipped && mostFrequentlyChoosedEntry[1] > 1 ? mostFrequentlyChoosedEntry[0] : undefined;
 
   return (
-    <main className="flex flex-col items-center gap-4 p-6 h-screen">
+    <main className="relative p-6 pt-9 md:pt-12 h-screen">
+      <AnimatePresence>
+        {room.flippedTimes > 3 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
+            <a
+              className="absolute top-3 md:top-4 text-sm lg:text-lg font-bold transition-all px-2 py-1 rounded-md hover:scale-105 hover:bg-[#a5f4d0] "
+              target="_blank"
+              rel="noreferrer noopener"
+              href="https://buymeacoffee.com/shanpig"
+            >
+              ☕ Having fun so far? Buy me a coffee!
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {name ? (
         <div className="flex flex-col justify-center gap-8 pt-4 pb-24 sm:pb-36 w-full">
           <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full lg:mb-8">
@@ -93,7 +108,7 @@ export default function RoomPage() {
             className="border-2 border-gray-300 rounded-md p-2"
             onChange={(e) => setInput(e.target.value)}
           />
-          <Button className="w-full" onClick={() => joinWithName(input)}>
+          <Button className="w-full max-w-48" onClick={() => joinWithName(input)}>
             Join
           </Button>
         </form>
