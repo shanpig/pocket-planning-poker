@@ -7,12 +7,16 @@ import { CARD_STYLES } from "@/app/constants/cards";
 const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, className, onClick }) => {
   return (
     <div
-      className={cn("transition-all duration-500 w-full h-full transform-3d perspective-distant", className, {
-        "cursor-pointer": onClick,
-        "hover:-translate-y-1 hover:shadow-xl": hoverable,
-        "scale-105 -translate-y-1 border-emerald-500 shadow-xl": selected,
-        "rotate-y-180": flipped,
-      })}
+      className={cn(
+        "transition-all duration-500 w-full h-full transform-3d perspective-distant rounded-xl",
+        className,
+        {
+          "cursor-pointer": onClick,
+          "hover:-translate-y-1 hover:shadow-xl": hoverable,
+          "scale-105 -translate-y-1 border-emerald-500 shadow-xl": selected,
+          "rotate-y-180": flipped,
+        }
+      )}
       onClick={onClick}
     >
       {/* Card front */}
