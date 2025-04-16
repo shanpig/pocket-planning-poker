@@ -7,6 +7,8 @@ export enum CardEnum {
   XL = "XL",
   XXL = "XXL",
   CONCEALED = "concealed",
+  SPIKE = "SPIKE",
+  SPLIT = "SPLIT",
 }
 
 export type CardValue = string;
