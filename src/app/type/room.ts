@@ -11,7 +11,10 @@ export type Room = {
 export type User = {
   id: string;
   name: string;
-  card?: CardValue;
+  card?: {
+    value: CardValue;
+    nonce: string;
+  } | null;
 };
 
 export type Users = Record<string, User>;

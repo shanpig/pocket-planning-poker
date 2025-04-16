@@ -30,7 +30,7 @@ import { CardEnum } from "../type/card";
 
 export const CARDS = [CardEnum.XXS, CardEnum.XS, CardEnum.S, CardEnum.M, CardEnum.L, CardEnum.XL, CardEnum.XXL];
 
-export const DEFAULT_CARDS: Record<CardEnum, StaticImageData> = {
+export const DEFAULT_CARDS: Record<string, StaticImageData> = {
   XXS: DefaultXXS,
   XS: DefaultXS,
   S: DefaultS,
@@ -41,7 +41,7 @@ export const DEFAULT_CARDS: Record<CardEnum, StaticImageData> = {
   concealed: DefaultBack,
 };
 
-export const INSCRYPTION_CARDS: Record<CardEnum, StaticImageData> = {
+export const INSCRYPTION_CARDS: Record<string, StaticImageData> = {
   XXS: InscryptionXXS,
   XS: InscryptionXS,
   S: InscryptionS,
@@ -52,7 +52,7 @@ export const INSCRYPTION_CARDS: Record<CardEnum, StaticImageData> = {
   concealed: InscryptionBack,
 };
 
-export const UNO_CARDS: Record<CardEnum, StaticImageData> = {
+export const UNO_CARDS: Record<string, StaticImageData> = {
   XXS: UnoXXS,
   XS: UnoXS,
   S: UnoS,

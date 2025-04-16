@@ -9,4 +9,4 @@ export enum CardEnum {
   CONCEALED = "concealed",
 }
 
-export type CardValue = CardEnum | "concealed" | null;
+export type CardValue = string;

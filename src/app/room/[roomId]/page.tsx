@@ -24,20 +24,21 @@ export default function RoomPage() {
         <div className="flex flex-col justify-center gap-8 pt-4 pb-24 sm:pb-36 w-full">
           <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full lg:mb-8">
             <div className="sm:text-lg lg:text-2xl mb-4 text-center">Members in the room</div>
-            <MembersTable room={room} socketId={socket.id} cardStyle={cardStyle} selectedCard={selectedCard} />
+            <MembersTable room={room} socketId={socket.id} cardStyle={cardStyle} />
           </div>
 
           <div className="flex gap-4 justify-center flex-wrap">
             {CARDS.map((value) => (
-              <Card
-                value={value}
-                key={value}
-                flipped
-                hoverable
-                cardStyle={cardStyle}
-                selected={selectedCard === value}
-                onClick={() => selectCard(value)}
-              />
+              <div key={value} className="relative shrink-0 w-16 h-24 sm:w-24 sm:h-36 md:w-30 md:h-45">
+                <Card
+                  value={value}
+                  flipped
+                  hoverable
+                  cardStyle={cardStyle}
+                  selected={selectedCard === value}
+                  onClick={() => selectCard(value)}
+                />
+              </div>
             ))}
           </div>
 

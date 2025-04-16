@@ -22,7 +22,10 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user"]: {
               id: "debug-user",
               name: "debug",
-              card: CardEnum.XXS,
+              card: {
+                value: CardEnum.XXS,
+                nonce: "asdf",
+              },
             },
             ["debug-user-2"]: {
               id: "debug-user-2",
@@ -31,7 +34,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user-3"]: {
               id: "debug-user-3",
               name: "debug-3",
-              card: CardEnum.XXS,
+              card: { value: CardEnum.XXS, nonce: "fdsa" },
             },
           },
           flipped: false,
