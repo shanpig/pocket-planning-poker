@@ -13,7 +13,7 @@ const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, c
         {
           "cursor-pointer": onClick,
           "hover:-translate-y-1 hover:shadow-xl": hoverable,
-          "scale-105 -translate-y-1 border-emerald-500 shadow-xl": selected,
+          "scale-105 -translate-y-1 shadow-xl": selected,
           "rotate-y-180": flipped,
         }
       )}
@@ -34,7 +34,7 @@ const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, c
         src={CARD_STYLES[cardStyle].back}
         alt="Card Back"
         fill
-        sizes="(max-width: 768px) 120px, 64px"
+        sizes="(max-width: 768px) 64px, 120px"
         className="backface-hidden rounded"
       />
     </div>

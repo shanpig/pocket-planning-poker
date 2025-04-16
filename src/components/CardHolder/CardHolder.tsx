@@ -13,11 +13,11 @@ const CardHolder: FC<CardHolderProps> = ({ nonce, ...cardProps }) => {
         {cardProps.value && (
           <motion.div
             key={nonce || cardProps.value}
-            initial={{ x: -10, y: -10, boxShadow: "4px 4px 12px rgba(0, 0, 0, 0.3)", opacity: 0 }}
+            initial={{ x: -10, y: -10, boxShadow: "4px 6px 12px 4px rgba(0, 0, 0, 1)", opacity: 0 }}
             animate={{ x: 0, y: 0, boxShadow: "0px 2px 6px rgba(0, 0, 0, 0)", opacity: 1 }}
             exit={{ x: 15, opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="absolute w-full h-full"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="absolute w-full h-full rounded-xl"
           >
             <Card {...cardProps} />
           </motion.div>
