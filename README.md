@@ -38,7 +38,7 @@ It's super easy:
 2. Build the image:
 
    ```bash
-   docker compose up --build
+   docker-compose build
    ```
 
 3. Run the script:
