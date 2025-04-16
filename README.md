@@ -35,13 +35,19 @@ It's super easy:
    PORT=6789
    ```
 
-2. Run the script:
+2. Build the image:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. Run the script:
 
    ```bash
    bin/poker.sh
    ```
 
-3. Use the ngrok website link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
+4. Use the ngrok website link in the stdout (`https://<hash>.ngrok-free.app`) to visit the app
 
    ![exec](/public/exec.png)
 
