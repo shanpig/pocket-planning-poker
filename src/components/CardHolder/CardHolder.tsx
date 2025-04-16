@@ -27,7 +27,7 @@ const CardHolder: FC<CardHolderProps> = ({ nonce, isMostFrequent, ...cardProps }
             animate={{
               x: 0,
               y: 0,
-              boxShadow: cardShadow,
+              boxShadow: cardProps.flipped ? cardShadow : "0px 2px 10px 5px rgba(0, 0, 0, 0)",
               opacity: 1,
             }}
             exit={{ x: 15, opacity: 0 }}
