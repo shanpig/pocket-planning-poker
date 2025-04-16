@@ -8,7 +8,7 @@ const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, c
   return (
     <div
       className={cn(
-        "transition-all duration-500 w-full h-full transform-3d perspective-distant rounded-xl",
+        "absolute transition-all duration-500 w-full h-full transform-3d perspective-distant rounded-xl",
         className,
         {
           "cursor-pointer": onClick,
@@ -20,15 +20,23 @@ const Card: FC<CardProps> = ({ value, cardStyle, flipped, selected, hoverable, c
       onClick={onClick}
     >
       {/* Card front */}
-      <div className="absolute w-full h-full backface-hidden rotate-y-180 flex items-center justify-center rounded">
-        {value && CARD_STYLES[cardStyle].cards[value] && (
-          <Image src={CARD_STYLES[cardStyle].cards[value]} alt={value} fill sizes="(max-width: 600px) 64px, 120px" />
-        )}
-      </div>
+      {value && CARD_STYLES[cardStyle].cards[value] && (
+        <Image
+          src={CARD_STYLES[cardStyle].cards[value]}
+          alt={value}
+          fill
+          sizes="(max-width: 600px) 64px, 120px"
+          className="backface-hidden rounded rotate-y-180"
+        />
+      )}
       {/* Card back */}
-      <div className="absolute w-full h-full backface-hidden flex items-center justify-center rounded">
-        <Image src={CARD_STYLES[cardStyle].back} alt="Card Back" fill sizes="(max-width: 768px) 120px, 64px" />
-      </div>
+      <Image
+        src={CARD_STYLES[cardStyle].back}
+        alt="Card Back"
+        fill
+        sizes="(max-width: 768px) 120px, 64px"
+        className="backface-hidden rounded"
+      />
     </div>
   );
 };

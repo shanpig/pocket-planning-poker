@@ -7,14 +7,14 @@ import InscryptionXL from "@/assets/inscryption/card-xl.jpg";
 import InscryptionXXL from "@/assets/inscryption/card-xxl.jpg";
 import InscryptionBack from "@/assets/inscryption/card-back.jpg";
 
-import UnoXXS from "@/assets/uno/card-xxs.jpg";
-import UnoXS from "@/assets/uno/card-xs.jpg";
-import UnoS from "@/assets/uno/card-s.jpg";
-import UnoM from "@/assets/uno/card-m.jpg";
-import UnoL from "@/assets/uno/card-l.jpg";
-import UnoXL from "@/assets/uno/card-xl.jpg";
-import UnoXXL from "@/assets/uno/card-xxl.jpg";
-import UnoBack from "@/assets/uno/card-back.jpg";
+import UnoXXS from "@/assets/uno/card-xxs.png";
+import UnoXS from "@/assets/uno/card-xs.png";
+import UnoS from "@/assets/uno/card-s.png";
+import UnoM from "@/assets/uno/card-m.png";
+import UnoL from "@/assets/uno/card-l.png";
+import UnoXL from "@/assets/uno/card-xl.png";
+import UnoXXL from "@/assets/uno/card-xxl.png";
+import UnoBack from "@/assets/uno/card-back.png";
 
 import DefaultXXS from "@/assets/default/card-xxs.png";
 import DefaultXS from "@/assets/default/card-xs.png";
