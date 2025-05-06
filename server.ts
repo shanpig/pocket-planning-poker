@@ -50,24 +50,23 @@ const createUser = (socketId: string, name: string, roomId: string) => {
   };
 };
 
-const getRoom = (roomId: string, requesterId?: string): Room => {
+const getRoom = (roomId: string): Room => {
   return {
     ...rooms[roomId],
-    users: getUsers(roomId, requesterId),
+    users: getUsers(roomId),
   };
 };
 
-const getUsers = (roomId: string, requesterId?: string) => {
+const getUsers = (roomId: string) => {
   return Object.fromEntries(
     Object.entries(rooms[roomId]?.users || {}).map(([id, user]) => {
-      const isSelf = user.id === requesterId;
       return [
         id,
         {
           ...user,
           card: user.card
             ? {
-                value: rooms[roomId].flipped || isSelf ? user.card.value : getHash(user.id + user.card.value),
+                value: rooms[roomId].flipped ? user.card.value : getHash(user.id + user.card.value),
                 nonce: user.card?.nonce,
               }
             : undefined,
@@ -118,10 +117,7 @@ app.prepare().then(() => {
 
         if (result.ok) {
           sender.sendEvent({ type: SERVER_SENT_EVENTS.JOINED, data: { name: data.name } });
-          sender.toAll(
-            { type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId, socket.id) } },
-            data.roomId
-          );
+          sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
         } else if (result.error) {
           sender.sendEvent({ type: SERVER_SENT_EVENTS.ERROR, data: { error: result.error } });
         }
@@ -148,7 +144,7 @@ app.prepare().then(() => {
     sender.on({
       type: SERVER_RECEIVED_EVENTS.GET_ROOM_UPDATE,
       handler: (data) => {
-        sender.sendEvent({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId, socket.id) } });
+        sender.sendEvent({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } });
       },
     });
 
@@ -159,10 +155,7 @@ app.prepare().then(() => {
           value: data.card as CardValue,
           nonce: getHash(socket.id + data.card),
         };
-        sender.toAll(
-          { type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId, socket.id) } },
-          data.roomId
-        );
+        sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
 
@@ -171,10 +164,7 @@ app.prepare().then(() => {
       handler: (data) => {
         rooms[data.roomId].flipped = true;
         rooms[data.roomId].flippedTimes = rooms[data.roomId].flippedTimes + 1;
-        sender.toAll(
-          { type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId, socket.id) } },
-          data.roomId
-        );
+        sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
 
@@ -185,10 +175,7 @@ app.prepare().then(() => {
         Object.values(rooms[data.roomId].users).forEach((user) => {
           user.card = null;
         });
-        sender.toAll(
-          { type: SERVER_SENT_EVENTS.RESTARTED, data: { room: getRoom(data.roomId, socket.id) } },
-          data.roomId
-        );
+        sender.toAll({ type: SERVER_SENT_EVENTS.RESTARTED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
 

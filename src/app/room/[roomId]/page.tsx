@@ -49,6 +49,7 @@ export default function RoomPage() {
               room={room}
               socketId={socket.id}
               cardStyle={cardStyle}
+              mySelectedCard={selectedCard}
               mostFrequentlyChoosed={mostFrequentlyChoosed}
             />
           </div>

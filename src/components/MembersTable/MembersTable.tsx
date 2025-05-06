@@ -2,16 +2,19 @@ import { Room } from "@/app/type/room";
 import { cn } from "@/lib/utils";
 import { CARD_STYLES } from "@/app/constants/cards";
 import CardHolder from "../CardHolder";
+import { CardEnum } from "@/app/type/card";
 
 const MembersTable = ({
   room,
   socketId,
   cardStyle,
+  mySelectedCard,
   mostFrequentlyChoosed,
 }: {
   room: Room;
   socketId?: string;
   cardStyle: keyof typeof CARD_STYLES;
+  mySelectedCard: CardEnum | null;
   mostFrequentlyChoosed: string | undefined;
 }) => {
   return (
@@ -32,7 +35,7 @@ const MembersTable = ({
             </div>
             <CardHolder
               cardStyle={cardStyle}
-              value={user.card?.value}
+              value={isSelf ? mySelectedCard : user.card?.value}
               nonce={user.card?.nonce}
               isMostFrequent={isMostFrequent}
               flipped={room.flipped || isSelf}
