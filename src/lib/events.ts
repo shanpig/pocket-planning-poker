@@ -11,6 +11,8 @@ export const CLIENT_SENT_EVENTS = {
   FLIP_CARDS: "flip_cards",
   RESTART: "restart",
   GET_ROOM_UPDATE: "get_room_update",
+  THINKING: "thinking",
+  CONFIRM: "confirm",
 } as const;
 
 export const SERVER_SENT_EVENTS = {

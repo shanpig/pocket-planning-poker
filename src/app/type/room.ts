@@ -12,6 +12,8 @@ export type Room = {
 export type User = {
   id: string;
   name: string;
+  isThinking: boolean;
+  isConfirmed: boolean;
   card?: {
     value: CardValue;
     nonce: string;

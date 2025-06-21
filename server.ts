@@ -43,6 +43,8 @@ const createUser = (socketId: string, name: string, roomId: string) => {
   rooms[roomId].users[socketId] = {
     id: socketId,
     name,
+    isThinking: false,
+    isConfirmed: false,
   };
 
   return {
@@ -174,6 +176,8 @@ app.prepare().then(() => {
         rooms[data.roomId].flipped = false;
         Object.values(rooms[data.roomId].users).forEach((user) => {
           user.card = null;
+          user.isThinking = false;
+          user.isConfirmed = false;
         });
         sender.toAll({ type: SERVER_SENT_EVENTS.RESTARTED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
@@ -191,6 +195,24 @@ app.prepare().then(() => {
       handler: (data) => {
         createRoom(data.roomId);
         sender.sendEvent({ type: SERVER_SENT_EVENTS.ROOM_CREATED, data: { roomId: data.roomId } });
+      },
+    });
+
+    sender.on({
+      type: SERVER_RECEIVED_EVENTS.THINKING,
+      handler: (data) => {
+        rooms[data.roomId].users[socket.id].isThinking = true;
+        rooms[data.roomId].users[socket.id].isConfirmed = false;
+        sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
+      },
+    });
+
+    sender.on({
+      type: SERVER_RECEIVED_EVENTS.CONFIRM,
+      handler: (data) => {
+        rooms[data.roomId].users[socket.id].isConfirmed = true;
+        rooms[data.roomId].users[socket.id].isThinking = false;
+        sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(data.roomId) } }, data.roomId);
       },
     });
   });

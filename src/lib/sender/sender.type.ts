@@ -8,7 +8,9 @@ export type ClientEventPayload =
   | { type: typeof CLIENT_SENT_EVENTS.RESTART; data: { roomId: string } }
   | { type: typeof CLIENT_SENT_EVENTS.GET_ROOM_UPDATE; data: { roomId: string } }
   | { type: typeof CLIENT_SENT_EVENTS.CHECK_ROOM; data: { roomId: string } }
-  | { type: typeof CLIENT_SENT_EVENTS.CREATE_ROOM; data: { roomId: string } };
+  | { type: typeof CLIENT_SENT_EVENTS.CREATE_ROOM; data: { roomId: string } }
+  | { type: typeof CLIENT_SENT_EVENTS.THINKING; data: { roomId: string } }
+  | { type: typeof CLIENT_SENT_EVENTS.CONFIRM; data: { roomId: string } };
 
 export type ClientEventHandler =
   | { type: typeof CLIENT_RECEIVED_EVENTS.JOINED; handler: (data: { name: string }) => void }
@@ -36,4 +38,6 @@ export type ServerEventHandler =
   | { type: typeof SERVER_RECEIVED_EVENTS.GET_ROOM_UPDATE; handler: (data: { roomId: string }) => void }
   | { type: typeof SERVER_RECEIVED_EVENTS.DISCONNECT; handler: () => void }
   | { type: typeof SERVER_RECEIVED_EVENTS.CHECK_ROOM; handler: (data: { roomId: string }) => void }
-  | { type: typeof SERVER_RECEIVED_EVENTS.CREATE_ROOM; handler: (data: { roomId: string }) => void };
+  | { type: typeof SERVER_RECEIVED_EVENTS.CREATE_ROOM; handler: (data: { roomId: string }) => void }
+  | { type: typeof SERVER_RECEIVED_EVENTS.THINKING; handler: (data: { roomId: string }) => void }
+  | { type: typeof SERVER_RECEIVED_EVENTS.CONFIRM; handler: (data: { roomId: string }) => void };

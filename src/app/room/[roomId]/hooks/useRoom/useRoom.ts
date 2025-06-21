@@ -22,6 +22,8 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user"]: {
               id: "debug-user",
               name: "debug",
+              isThinking: false,
+              isConfirmed: false,
               card: {
                 value: CardEnum.XXS,
                 nonce: "asdf",
@@ -30,10 +32,14 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
             ["debug-user-2"]: {
               id: "debug-user-2",
               name: "debug-2",
+              isThinking: true,
+              isConfirmed: false,
             },
             ["debug-user-3"]: {
               id: "debug-user-3",
               name: "debug-3",
+              isThinking: false,
+              isConfirmed: true,
               card: { value: CardEnum.XXS, nonce: "fdsa" },
             },
           },
@@ -48,6 +54,20 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
         }
   );
   const [selectedCard, setSelectedCard] = useState<CardEnum | null>(debug ? CardEnum.XXS : null);
+  const [isThinking, setIsThinking] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const thinking = useCallback(() => {
+    sender.sendEvent({ type: CLIENT_SENT_EVENTS.THINKING, data: { roomId } });
+    setIsThinking(true);
+    setIsConfirmed(false);
+  }, [roomId]);
+
+  const confirm = useCallback(() => {
+    sender.sendEvent({ type: CLIENT_SENT_EVENTS.CONFIRM, data: { roomId } });
+    setIsConfirmed(true);
+    setIsThinking(false);
+  }, [roomId]);
 
   const disconnect = useCallback((e: Event) => {
     e.preventDefault();
@@ -66,18 +86,27 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const selectCard = useCallback(
     (card: CardEnum) => {
       setSelectedCard(card);
+      setIsThinking(false);
+      setIsConfirmed(true);
+      confirm();
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.SELECT_CARD, data: { card, roomId } });
     },
-    [roomId]
+    [roomId, confirm]
   );
 
   const flipCards = useCallback(() => {
+    if (Object.values(room.users).some((user) => !user.isConfirmed)) {
+      toast.info("Please wait for all users to confirm their cards");
+      return;
+    }
     sender.sendEvent({ type: CLIENT_SENT_EVENTS.FLIP_CARDS, data: { roomId } });
-  }, [roomId]);
+  }, [room.users, roomId]);
 
   const restart = useCallback(() => {
     sender.sendEvent({ type: CLIENT_SENT_EVENTS.RESTART, data: { roomId } });
     setSelectedCard(null);
+    setIsThinking(false);
+    setIsConfirmed(false);
   }, [roomId]);
 
   useEffect(() => {
@@ -108,6 +137,11 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
       type: CLIENT_RECEIVED_EVENTS.ROOM_UPDATED,
       handler: (data) => {
         setRoom(data.room);
+        if (socket.id) {
+          console.log(data.room.users[socket.id]);
+          setIsThinking(data.room.users[socket.id].isThinking);
+          setIsConfirmed(data.room.users[socket.id].isConfirmed);
+        }
       },
     });
 
@@ -146,10 +180,14 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
     room,
     socket: debug ? { id: "debug-user" } : socket,
     selectedCard,
+    isThinking,
+    isConfirmed,
     joinWithName,
     selectCard,
     flipCards,
     restart,
+    thinking,
+    confirm,
   };
 };
 

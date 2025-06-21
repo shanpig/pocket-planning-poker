@@ -18,7 +18,20 @@ export default function RoomPage() {
   const [input, setInput] = useState("");
   const [cardStyle, setCardStyle] = useState<keyof typeof CARD_STYLES>("default");
 
-  const { name, room, socket, selectedCard, joinWithName, selectCard, flipCards, restart } = useRoom();
+  const {
+    name,
+    room,
+    socket,
+    selectedCard,
+    isThinking,
+    isConfirmed,
+    joinWithName,
+    selectCard,
+    flipCards,
+    restart,
+    thinking,
+    confirm,
+  } = useRoom();
 
   const appearedTimes = countBy(Object.values(room.users).map(({ card }) => card?.value));
   const mostFrequentlyChoosedEntry = maxBy(Object.entries(appearedTimes), last) || ["", 0];
@@ -70,8 +83,25 @@ export default function RoomPage() {
           </div>
 
           <div className="flex flex-col gap-4">
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                className="grow"
+                disabled={room.flipped || isThinking}
+                onClick={() => thinking()}
+              >
+                Thinking
+              </Button>
+              <Button
+                className="grow"
+                disabled={!selectedCard || room.flipped || isConfirmed}
+                onClick={() => confirm()}
+              >
+                Confirm
+              </Button>
+            </div>
             <Button
-              disabled={room?.flipped || Object.values(room?.users ?? {}).some(({ card }) => !card)}
+              disabled={room?.flipped || isThinking || Object.values(room?.users ?? {}).some(({ card }) => !card)}
               onClick={() => flipCards()}
             >
               Flip Cards

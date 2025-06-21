@@ -26,7 +26,7 @@ const MembersTable = ({
         return (
           <div
             key={user.id}
-            className={cn("flex flex-col gap-2 w-16 sm:w-24 md:w-30 items-center md:max-w-32", {
+            className={cn("flex flex-col gap-3 w-16 sm:w-24 md:w-30 items-center md:max-w-32", {
               "order-first": isSelf,
             })}
           >
@@ -39,6 +39,8 @@ const MembersTable = ({
               nonce={user.card?.nonce}
               isMostFrequent={isMostFrequent}
               flipped={room.flipped || isSelf}
+              isThinking={user.isThinking}
+              isConfirmed={user.isConfirmed}
             />
           </div>
         );
