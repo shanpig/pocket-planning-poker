@@ -153,7 +153,10 @@ app.prepare().then(() => {
     sender.on({
       type: SERVER_RECEIVED_EVENTS.SELECT_CARD,
       handler: (data) => {
-        rooms[data.roomId].users[socket.id].card = {
+        const user = rooms[data.roomId].users[socket.id];
+        user.isConfirmed = true;
+        user.isThinking = false;
+        user.card = {
           value: data.card as CardValue,
           nonce: getHash(socket.id + data.card),
         };

@@ -55,8 +55,9 @@ export default function RoomPage() {
         )}
       </AnimatePresence>
       {name ? (
-        <div className="flex flex-col justify-center gap-8 pt-4 pb-28 sm:pb-36 w-full">
-          <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full lg:mb-8">
+        <div className="flex flex-col lg:flex-row justify-center gap-8 pt-4 pb-28 sm:pb-36 w-full h-full">
+          {/* Members In The Room */}
+          <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full">
             <div className="sm:text-lg lg:text-2xl text-center">Members in the room</div>
             <MembersTable
               room={room}
@@ -67,68 +68,73 @@ export default function RoomPage() {
             />
           </div>
 
-          <div className="flex gap-4 justify-center flex-wrap">
-            {CARDS.map((value) => (
-              <div key={value} className="relative shrink-0 w-16 h-24 sm:w-24 sm:h-36 md:w-30 md:h-45">
-                <Card
-                  value={value}
-                  flipped
-                  hoverable
-                  cardStyle={cardStyle}
-                  selected={selectedCard === value}
-                  onClick={() => selectCard(value)}
-                />
-              </div>
-            ))}
-          </div>
+          <div className="flex flex-col gap-8 ">
+            {/* Your Cards */}
+            <div className="flex gap-4 justify-center flex-wrap">
+              {CARDS.map((value) => (
+                <div key={value} className="relative shrink-0 w-16 h-24 md:w-20 md:h-30 lg:w-24 lg:h-36">
+                  <Card
+                    value={value}
+                    flipped
+                    hoverable
+                    cardStyle={cardStyle}
+                    selected={selectedCard === value}
+                    onClick={() => selectCard(value)}
+                  />
+                </div>
+              ))}
+            </div>
 
-          <div className="flex flex-col gap-2 md:gap-4">
-            <div className="flex gap-2 md:gap-4">
+            {/* Buttons */}
+            <div className="flex flex-col gap-2 md:gap-4">
+              <div className="flex gap-2 md:gap-4">
+                <Button
+                  variant="outline"
+                  className="grow h-10 md:h-16 flex-1/2 md:text-xl"
+                  disabled={room.flipped || isThinking}
+                  onClick={() => thinking()}
+                >
+                  Thinking <code>T</code>
+                </Button>
+                <Button
+                  className="grow h-10 md:h-16 flex-1/2 md:text-xl"
+                  disabled={!selectedCard || room.flipped || isConfirmed}
+                  onClick={() => confirm()}
+                >
+                  Confirm <code>C</code>/<code>Enter</code>
+                </Button>
+              </div>
               <Button
-                variant="outline"
-                className="grow h-10 md:h-16 flex-1/2 md:text-xl"
-                disabled={room.flipped || isThinking}
-                onClick={() => thinking()}
+                disabled={room?.flipped || isThinking || Object.values(room?.users ?? {}).some(({ card }) => !card)}
+                className="h-10 md:h-16 md:text-xl"
+                onClick={() => flipCards()}
               >
-                Thinking <code>T</code>
+                Flip Cards <code>F</code>
               </Button>
-              <Button
-                className="grow h-10 md:h-16 flex-1/2 md:text-xl"
-                disabled={!selectedCard || room.flipped || isConfirmed}
-                onClick={() => confirm()}
-              >
-                Confirm <code>C</code>/<code>Enter</code>
+              <Button disabled={!room?.flipped} onClick={() => restart()} className="h-10 md:h-16 md:text-xl">
+                Restart <code>R</code>
               </Button>
             </div>
-            <Button
-              disabled={room?.flipped || isThinking || Object.values(room?.users ?? {}).some(({ card }) => !card)}
-              className="h-10 md:h-16 md:text-xl"
-              onClick={() => flipCards()}
-            >
-              Flip Cards <code>F</code>
-            </Button>
-            <Button disabled={!room?.flipped} onClick={() => restart()} className="h-10 md:h-16 md:text-xl">
-              Restart <code>R</code>
-            </Button>
-          </div>
 
-          <div className="fixed left-0 right-0 bottom-0 pb-4 bg-linear-to-b from-transparent from-15%  to-gray-400 flex gap-4 justify-center">
-            {Object.entries(CARD_STYLES).map(([key, { back }]) => (
-              <Image
-                className={cn(
-                  "w-10 md:w-14 aspect-[2/3] rounded-sm shadow-md transition-all shadow-gray-300 cursor-pointer hover:scale-105",
-                  {
-                    "-translate-y-3 shadow-lg ": cardStyle === key,
-                  }
-                )}
-                width={50}
-                height={75}
-                key={key}
-                src={back}
-                alt={key}
-                onClick={() => setCardStyle(key as keyof typeof CARD_STYLES)}
-              />
-            ))}
+            {/* Card Styles */}
+            <div className="fixed left-0 right-0 bottom-0 pb-4 bg-linear-to-b from-transparent from-15%  to-gray-400 flex gap-4 justify-center">
+              {Object.entries(CARD_STYLES).map(([key, { back }]) => (
+                <Image
+                  className={cn(
+                    "w-10 md:w-14 aspect-[2/3] rounded-sm shadow-md transition-all shadow-gray-300 cursor-pointer hover:scale-105",
+                    {
+                      "-translate-y-3 shadow-lg ": cardStyle === key,
+                    }
+                  )}
+                  width={50}
+                  height={75}
+                  key={key}
+                  src={back}
+                  alt={key}
+                  onClick={() => setCardStyle(key as keyof typeof CARD_STYLES)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       ) : (

@@ -57,6 +57,9 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const [isThinking, setIsThinking] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
+  console.log("isThinking", isThinking);
+  console.log("isConfirmed", isConfirmed);
+
   const thinking = useCallback(() => {
     if (!room.flipped && !isThinking) {
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.THINKING, data: { roomId } });
@@ -92,10 +95,9 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
       setSelectedCard(card);
       setIsThinking(false);
       setIsConfirmed(true);
-      confirm();
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.SELECT_CARD, data: { card, roomId } });
     },
-    [roomId, confirm]
+    [roomId]
   );
 
   const flipCards = useCallback(() => {
