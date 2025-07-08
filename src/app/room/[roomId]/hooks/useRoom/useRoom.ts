@@ -58,16 +58,20 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const thinking = useCallback(() => {
-    sender.sendEvent({ type: CLIENT_SENT_EVENTS.THINKING, data: { roomId } });
-    setIsThinking(true);
-    setIsConfirmed(false);
-  }, [roomId]);
+    if (!room.flipped && !isThinking) {
+      sender.sendEvent({ type: CLIENT_SENT_EVENTS.THINKING, data: { roomId } });
+      setIsThinking(true);
+      setIsConfirmed(false);
+    }
+  }, [isThinking, room.flipped, roomId]);
 
   const confirm = useCallback(() => {
-    sender.sendEvent({ type: CLIENT_SENT_EVENTS.CONFIRM, data: { roomId } });
-    setIsConfirmed(true);
-    setIsThinking(false);
-  }, [roomId]);
+    if (selectedCard && !room.flipped && !isConfirmed) {
+      sender.sendEvent({ type: CLIENT_SENT_EVENTS.CONFIRM, data: { roomId } });
+      setIsConfirmed(true);
+      setIsThinking(false);
+    }
+  }, [isConfirmed, room.flipped, roomId, selectedCard]);
 
   const disconnect = useCallback((e: Event) => {
     e.preventDefault();
@@ -95,19 +99,53 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   );
 
   const flipCards = useCallback(() => {
-    if (Object.values(room.users).some((user) => !user.isConfirmed)) {
-      toast.info("Please wait for all users to confirm their cards");
-      return;
+    if (!room?.flipped && !isThinking) {
+      const isEveryoneConfirmed = Object.values(room.users).every((user) => user.isConfirmed);
+
+      if (!isEveryoneConfirmed) {
+        toast.info("Please wait for all users to confirm their cards");
+        return;
+      }
+      sender.sendEvent({ type: CLIENT_SENT_EVENTS.FLIP_CARDS, data: { roomId } });
     }
-    sender.sendEvent({ type: CLIENT_SENT_EVENTS.FLIP_CARDS, data: { roomId } });
-  }, [room.users, roomId]);
+  }, [isThinking, room?.flipped, room.users, roomId]);
 
   const restart = useCallback(() => {
-    sender.sendEvent({ type: CLIENT_SENT_EVENTS.RESTART, data: { roomId } });
-    setSelectedCard(null);
-    setIsThinking(false);
-    setIsConfirmed(false);
-  }, [roomId]);
+    if (room?.flipped) {
+      sender.sendEvent({ type: CLIENT_SENT_EVENTS.RESTART, data: { roomId } });
+      setSelectedCard(null);
+      setIsThinking(false);
+      setIsConfirmed(false);
+    }
+  }, [room?.flipped, roomId]);
+
+  useEffect(() => {
+    const keyPressHandler = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+
+      switch (key) {
+        case "t":
+          thinking();
+          break;
+        case "c":
+        case "enter":
+          confirm();
+          break;
+        case "f":
+          flipCards();
+          break;
+        case "r":
+          restart();
+          break;
+      }
+    };
+
+    document.addEventListener("keypress", keyPressHandler);
+
+    return () => {
+      document.removeEventListener("keypress", keyPressHandler);
+    };
+  }, [confirm, flipCards, restart, thinking]);
 
   useEffect(() => {
     if (debug) return;

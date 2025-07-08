@@ -86,29 +86,29 @@ export default function RoomPage() {
             <div className="flex gap-2 md:gap-4">
               <Button
                 variant="outline"
-                className="grow h-8 md:h-10"
+                className="grow h-10 md:h-16 flex-1/2 md:text-xl"
                 disabled={room.flipped || isThinking}
                 onClick={() => thinking()}
               >
-                Thinking
+                Thinking <code>T</code>
               </Button>
               <Button
-                className="grow h-8 md:h-10"
+                className="grow h-10 md:h-16 flex-1/2 md:text-xl"
                 disabled={!selectedCard || room.flipped || isConfirmed}
                 onClick={() => confirm()}
               >
-                Confirm
+                Confirm <code>C</code>/<code>Enter</code>
               </Button>
             </div>
             <Button
               disabled={room?.flipped || isThinking || Object.values(room?.users ?? {}).some(({ card }) => !card)}
-              className="h-8 md:h-10"
+              className="h-10 md:h-16 md:text-xl"
               onClick={() => flipCards()}
             >
-              Flip Cards
+              Flip Cards <code>F</code>
             </Button>
-            <Button disabled={!room?.flipped} onClick={() => restart()} className="h-8 md:h-10">
-              Restart
+            <Button disabled={!room?.flipped} onClick={() => restart()} className="h-10 md:h-16 md:text-xl">
+              Restart <code>R</code>
             </Button>
           </div>
 
