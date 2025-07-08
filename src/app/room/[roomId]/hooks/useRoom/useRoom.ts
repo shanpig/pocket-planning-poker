@@ -1,6 +1,7 @@
 import { CardEnum } from "@/app/type/card";
 import { Room } from "@/app/type/room";
 import { CLIENT_RECEIVED_EVENTS, CLIENT_SENT_EVENTS } from "@/lib/events";
+import logger from "@/lib/logger";
 import { ClientSender } from "@/lib/sender/sender";
 import { socket } from "@/lib/socket";
 import { useParams, useRouter } from "next/navigation";
@@ -57,8 +58,8 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const [isThinking, setIsThinking] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  console.log("isThinking", isThinking);
-  console.log("isConfirmed", isConfirmed);
+  logger.log("isThinking", isThinking);
+  logger.log("isConfirmed", isConfirmed);
 
   const thinking = useCallback(() => {
     if (!room.flipped && !isThinking) {
@@ -79,7 +80,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   const disconnect = useCallback((e: Event) => {
     e.preventDefault();
     return Promise.resolve(() => {
-      console.log("disconnecting from server");
+      logger.log("disconnecting from server");
     });
   }, []);
 
@@ -152,7 +153,7 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
   useEffect(() => {
     if (debug) return;
     if (socket.connected) {
-      console.log("connected to server");
+      logger.log("connected to server");
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.CHECK_ROOM, data: { roomId } });
       sender.sendEvent({ type: CLIENT_SENT_EVENTS.GET_ROOM_UPDATE, data: { roomId } });
     }

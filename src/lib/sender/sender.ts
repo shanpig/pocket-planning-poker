@@ -1,6 +1,7 @@
 import { DefaultEventsMap, Server, Socket as ServerSocket } from "socket.io";
 import { Socket as ClientSocket } from "socket.io-client";
 import { ClientEventHandler, ClientEventPayload, ServerEventHandler, ServerEventPayload } from "./sender.type";
+import logger from "../logger";
 
 export class ClientSender {
   constructor(private socket: ClientSocket) {
@@ -8,13 +9,13 @@ export class ClientSender {
   }
 
   sendEvent(payload: ClientEventPayload) {
-    console.log(`client > ${payload.type}`, payload.data);
+    logger.log(`client > ${payload.type}`, payload.data);
     this.socket.emit(payload.type, payload.data);
   }
 
   on(args: ClientEventHandler) {
     this.socket.on(args.type, (data: any) => {
-      console.log(`client < ${args.type}`, data);
+      logger.log(`client < ${args.type}`, data);
       args.handler?.(data);
     });
   }
@@ -30,18 +31,18 @@ export class ServerSender {
   }
 
   toAll(payload: ServerEventPayload, roomId: string) {
-    console.log(`server toAll > ${payload.type}`, payload.data);
+    logger.log(`server toAll > ${payload.type}`, payload.data);
     this.io.to(roomId).emit(payload.type, payload.data);
   }
 
   sendEvent(payload: ServerEventPayload) {
-    console.log(`server > ${payload.type}`, payload.data);
+    logger.log(`server > ${payload.type}`, payload.data);
     this.socket.emit(payload.type, payload.data);
   }
 
   on(args: ServerEventHandler) {
     this.socket.on(args.type, (data: any) => {
-      console.log(`server < ${args.type}`, data);
+      logger.log(`server < ${args.type}`, data);
       args.handler?.(data);
     });
   }

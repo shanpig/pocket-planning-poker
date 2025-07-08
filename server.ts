@@ -6,6 +6,7 @@ import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "./src/lib/events";
 import { Room, Rooms } from "./src/app/type/room";
 import { ServerSender } from "./src/lib/sender/sender";
 import { CardValue } from "./src/app/type/card";
+import logger from "@/lib/logger";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -79,10 +80,10 @@ const getUsers = (roomId: string) => {
 };
 
 const cleanupUser = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) => {
-  console.log("server: cleaning up rooms. current room status: ", JSON.stringify(rooms));
+  logger.log("server: cleaning up rooms. current room status: ", JSON.stringify(rooms));
 
   Object.values(rooms).forEach((room) => {
-    console.log(`server: removing user ${socket.id} from room ${room.id}`);
+    logger.log(`server: removing user ${socket.id} from room ${room.id}`);
     delete room.users[socket.id];
   });
 };
@@ -90,7 +91,7 @@ const cleanupUser = (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultE
 const cleanupRooms = (sender: ServerSender) => {
   Object.values(rooms).forEach((room) => {
     if (Object.keys(room.users).length === 0) {
-      console.log(`server: room ${room.id} is empty, deleting`);
+      logger.log(`server: room ${room.id} is empty, deleting`);
       delete rooms[room.id];
     } else {
       sender.toAll({ type: SERVER_SENT_EVENTS.ROOM_UPDATED, data: { room: getRoom(room.id) } }, room.id);
@@ -104,7 +105,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    console.log("a user connected");
+    logger.log("a user connected");
 
     const sender = new ServerSender(io, socket);
 
@@ -129,7 +130,7 @@ app.prepare().then(() => {
     // 不知為何 socket.on("disconnect") 不會在關閉頁面、重整頁面等時間點觸發，所以改用 conn.on("close") 來監聽
     // ref: https://socket.io/docs/v4/server-socket-instance/
     socket.conn.on("close", (reason) => {
-      console.log("server: a user disconnected, reason: ", reason);
+      logger.log("server: a user disconnected, reason: ", reason);
       cleanupUser(socket);
       cleanupRooms(sender);
     });
@@ -137,7 +138,7 @@ app.prepare().then(() => {
     sender.on({
       type: SERVER_RECEIVED_EVENTS.DISCONNECT,
       handler: () => {
-        console.log("server: a user disconnected");
+        logger.log("server: a user disconnected");
         cleanupUser(socket);
         cleanupRooms(sender);
       },
@@ -222,7 +223,7 @@ app.prepare().then(() => {
 
   io.on("disconnect", (socket) => {
     const sender = new ServerSender(io, socket);
-    console.log("io: a user disconnected");
+    logger.log("io: a user disconnected");
     cleanupRooms(sender);
   });
 
@@ -232,6 +233,6 @@ app.prepare().then(() => {
       process.exit(1);
     })
     .listen(port, () => {
-      console.log(`> Ready on http://localhost:${port}`);
+      logger.log(`> Ready on http://localhost:${port}`);
     });
 });
