@@ -137,10 +137,10 @@ const useRoom = ({ debug }: { debug?: boolean } = {}) => {
       type: CLIENT_RECEIVED_EVENTS.ROOM_UPDATED,
       handler: (data) => {
         setRoom(data.room);
-        if (socket.id) {
-          console.log(data.room.users[socket.id]);
-          setIsThinking(data.room.users[socket.id].isThinking);
-          setIsConfirmed(data.room.users[socket.id].isConfirmed);
+        const user = data.room.users[socket.id ?? ""];
+        if (user) {
+          setIsThinking(user.isThinking);
+          setIsConfirmed(user.isConfirmed);
         }
       },
     });

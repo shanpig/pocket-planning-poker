@@ -55,7 +55,7 @@ export default function RoomPage() {
         )}
       </AnimatePresence>
       {name ? (
-        <div className="flex flex-col justify-center gap-8 pt-4 pb-24 sm:pb-36 w-full">
+        <div className="flex flex-col justify-center gap-8 pt-4 pb-28 sm:pb-36 w-full">
           <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full lg:mb-8">
             <div className="sm:text-lg lg:text-2xl text-center">Members in the room</div>
             <MembersTable
@@ -82,18 +82,18 @@ export default function RoomPage() {
             ))}
           </div>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex gap-4">
+          <div className="flex flex-col gap-2 md:gap-4">
+            <div className="flex gap-2 md:gap-4">
               <Button
                 variant="outline"
-                className="grow"
+                className="grow h-8 md:h-10"
                 disabled={room.flipped || isThinking}
                 onClick={() => thinking()}
               >
                 Thinking
               </Button>
               <Button
-                className="grow"
+                className="grow h-8 md:h-10"
                 disabled={!selectedCard || room.flipped || isConfirmed}
                 onClick={() => confirm()}
               >
@@ -102,11 +102,12 @@ export default function RoomPage() {
             </div>
             <Button
               disabled={room?.flipped || isThinking || Object.values(room?.users ?? {}).some(({ card }) => !card)}
+              className="h-8 md:h-10"
               onClick={() => flipCards()}
             >
               Flip Cards
             </Button>
-            <Button disabled={!room?.flipped} onClick={() => restart()}>
+            <Button disabled={!room?.flipped} onClick={() => restart()} className="h-8 md:h-10">
               Restart
             </Button>
           </div>
