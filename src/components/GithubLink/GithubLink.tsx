@@ -4,7 +4,7 @@ import Image from "next/image";
 const GithubLink = () => {
   return (
     <div
-      className="fixed top-0 right-0 bg-black w-20 h-20 z-50 hover:scale-105"
+      className="fixed top-0 right-0 bg-black w-14 h-14 lg:w-20 lg:h-20 z-50 hover:scale-105"
       style={{
         clipPath: "polygon(100% 0, 100% 100%, 0 0)",
       }}

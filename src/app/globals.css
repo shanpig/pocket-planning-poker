@@ -121,10 +121,12 @@
   }
 }
 
-code {
-  display: inline-block;
-  font-weight: bold;
-  border-radius: 0.2rem;
-  border: 1px solid lightgray;
-  padding: 0.125rem 0.5rem;
+@layer utilities {
+  code {
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 0.2rem;
+    border: 1px solid lightgray;
+    padding: 0.125rem 0.5rem;
+  }
 }
