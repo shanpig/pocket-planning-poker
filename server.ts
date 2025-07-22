@@ -6,7 +6,7 @@ import { SERVER_SENT_EVENTS, SERVER_RECEIVED_EVENTS } from "./src/lib/events";
 import { Room, Rooms } from "./src/app/type/room";
 import { ServerSender } from "./src/lib/sender/sender";
 import { CardValue } from "./src/app/type/card";
-import logger from "@/lib/logger";
+import logger from "./src/lib/logger";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
