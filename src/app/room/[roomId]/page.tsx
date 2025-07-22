@@ -39,7 +39,7 @@ export default function RoomPage() {
     room.flipped && mostFrequentlyChoosedEntry[1] > 1 ? mostFrequentlyChoosedEntry[0] : undefined;
 
   return (
-    <main className="relative p-6 pt-9 md:pt-12 h-screen">
+    <main className="relative p-6 pt-9 md:pt-12 min-h-screen">
       <AnimatePresence>
         {room.flippedTimes > 3 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
