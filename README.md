@@ -2,7 +2,9 @@
 
 ![pocket-planning-poker](/public/pocket-planning-poker.png)
 
-<br/><br/>
+<br/>
+
+## [See the demo here!](https://poker.shanpig.com)
 
 Planning poker everywhere - this one is a small and concise one.
 
