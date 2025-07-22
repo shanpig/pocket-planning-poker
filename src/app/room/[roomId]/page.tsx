@@ -9,10 +9,9 @@ import { useState } from "react";
 
 import useRoom from "./hooks/useRoom";
 import MembersTable from "@/components/MembersTable";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { countBy, last, maxBy } from "lodash-es";
 import { AnimatePresence, motion } from "motion/react";
+import CardStyleSelector from "../components/CardStyleSelector";
 
 export default function RoomPage() {
   const [input, setInput] = useState("");
@@ -117,24 +116,7 @@ export default function RoomPage() {
             </div>
 
             {/* Card Styles */}
-            <div className="fixed left-0 right-0 bottom-0 pb-4 bg-linear-to-b from-transparent from-15%  to-gray-400 flex gap-4 justify-center">
-              {Object.entries(CARD_STYLES).map(([key, { back }]) => (
-                <Image
-                  className={cn(
-                    "w-10 md:w-14 aspect-[2/3] rounded-sm shadow-md transition-all shadow-gray-300 cursor-pointer hover:scale-105",
-                    {
-                      "-translate-y-3 shadow-lg ": cardStyle === key,
-                    }
-                  )}
-                  width={50}
-                  height={75}
-                  key={key}
-                  src={back}
-                  alt={key}
-                  onClick={() => setCardStyle(key as keyof typeof CARD_STYLES)}
-                />
-              ))}
-            </div>
+            <CardStyleSelector cardStyle={cardStyle} setCardStyle={setCardStyle} />
           </div>
         </div>
       ) : (
