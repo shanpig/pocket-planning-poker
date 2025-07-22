@@ -54,7 +54,7 @@ export default function RoomPage() {
         )}
       </AnimatePresence>
       {name ? (
-        <div className="flex flex-col lg:flex-row justify-center gap-8 pt-4 pb-28 sm:pb-36 w-full h-full">
+        <div className="flex flex-col lg:flex-row justify-center gap-8 pt-4 pb-8 sm:pb-10 w-full h-full">
           {/* Members In The Room */}
           <div className="flex flex-col gap-2 md:items-center border-2 border-gray-300 rounded-md p-4 w-full">
             <div className="sm:text-lg lg:text-2xl text-center">Members in the room</div>
